@@ -1,2 +1,2 @@
 # nios-ii-study
- ELEC274 assembly learning
+Nios II assembly language learning on Altra DE0 media board
