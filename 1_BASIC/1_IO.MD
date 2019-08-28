@@ -1,9 +1,11 @@
 # IO
+## Subroutines
+- PrintChar, PrintString, PrintDigit, PrintHexDigit
+- GetChar, GetString, GetDigit, GetHexDight
 ## IO interface example
 - Keyboard has KIN status flag in bit b_1 of KBD_STATUS register
 - Processor polls KBD_STATUS register, checking if KIN flag is 0 or 1
 - if KIN is 1, processor reads KBD_DATA register
-
 ![kdi](../imgs/Keyboard-Dispaly-interface.png)
 ## Wait Loop For Polling I/O Status
 - Program-controlled I/O implemented with a wait loop for polling keyboard status register:
