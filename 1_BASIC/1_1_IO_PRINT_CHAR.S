@@ -19,10 +19,10 @@ _start:
 _end:
   br  _end
 
-PrintChar:
+PrintChar:  # r2的值是传入的打印值;
   subi  sp, sp, 8
-  stw r3, 4(sp)
-  stw r4, 0(sp)
+  stw r3, 4(sp) # r3用来存JTAG_UART_BASE;
+  stw r4, 0(sp) # r4用来存Status Value;
   movia r3, JTAG_UART_BASE
 
 pc_loop:

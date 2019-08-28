@@ -14,24 +14,24 @@
 _start:
   movia sp, LAST_RAM_WORD
   call  GetChar
-  stb r2, A(r0)
+  stb r2, CHAR_BUFFER(r0)
 
 _end:
   br  _end
 
-GetChar:
+GetChar:  # 键盘输入字符通过r2返回;
   subi  sp, sp, 8
-  stw   r3, 4(sp)
-  stw   r4, 0(sp)
+  stw   r3, 4(sp) # r3用来存JTAG_UART_BASE;
+  stw   r4, 0(sp) # r4用来存放data&status value
   movia r3, JTAG_UART_BASE
 
 gc_loop:
-  ldwio   r4, DATA_OFFSET(r3)
-  andi    r2, r4, RVALID_MASK
-  beq     r2, r0, gc_loop
+  ldwio   r2, DATA_OFFSET(r3)
+  andi    r4, r2, RVALID_MASK
+  beq     r4, r0, gc_loop
 
 end_gc_loop:
-  andi    r2, r4, DATA_MASK
+  andi    r2, r2, DATA_MASK
   ldw   r3, 4(sp)
   ldw   r4, 0(sp)
   addi  sp, sp, 8
@@ -40,5 +40,5 @@ end_gc_loop:
   .section		VARIABLES
   .data
   .org  DATA_RAM_LOC
-A: .skip 1
+CHAR_BUFFER: .skip 1
   .end
