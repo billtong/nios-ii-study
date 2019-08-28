@@ -37,7 +37,7 @@ end_pc_loop:
   addi sp, sp, 8
   ret
 
-  .section		Variables
+  .section		VARIABLES
   .data
   .org DATA_RAM_LOC
 A:  .byte 'a'
