@@ -14,7 +14,7 @@
 _start:
   movia sp, LAST_RAM_WORD
   call  GetChar
-  stb r2, CHAR_BUFFER(r0)
+  stb   r2, CHAR_BUFFER(r0)
 _end:
   br  _end
 
@@ -28,7 +28,7 @@ gc_loop:
   andi    r4, r2, RVALID_MASK
   beq     r4, r0, gc_loop
 end_gc_loop:
-  andi    r2, r2, DATA_MASK
+  andi  r2, r2, DATA_MASK
   ldw   r3, 4(sp)
   ldw   r4, 0(sp)
   addi  sp, sp, 8
