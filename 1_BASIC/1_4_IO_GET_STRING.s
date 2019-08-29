@@ -5,7 +5,8 @@
   .equ  DATA_MASK, 0xFF
   .equ  TEXT_RAM_LOC, 0x00000000
   .equ  DATA_RAM_LOC, 0x00001000
-  
+  .equ  END_OF_STRING, '\n'
+
   .section		CODE
   .text
   .global _start
@@ -14,7 +15,6 @@
 _start:
   movia sp, LAST_RAM_WORD
   call  GetString
-
 _end:
   br  _end
 
@@ -25,15 +25,13 @@ GetString:
   stw r4, 4(sp)   # r4存放'0'结束符号
   stw ra, 0(sp)   # 嵌套subroutine
   movia r3, STRING_BUFFER
-  movi  r4, '0'
-
+  movi  r4, END_OF_STRING
 gs_loop:
   call GetChar
   beq r2, r4, end_gs_loop
   stb r2, DATA_OFFSET(r3)
   addi  r3, r3, 1
   br  gs_loop
-
 end_gs_loop:
   stb 	r0, DATA_OFFSET(r3)
   ldw r2, 12(sp)
@@ -63,7 +61,7 @@ end_gc_loop:
   .section		VARIABLES
   .data
   .org		DATA_RAM_LOC
-STRING_BUFFER:  .skip 100
+STRING_BUFFER:  .skip 10
   .end
   
   

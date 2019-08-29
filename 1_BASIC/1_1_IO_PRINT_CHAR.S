@@ -15,7 +15,6 @@ _start:
   movia sp, LAST_RAM_WORD
   ldb r2, A(r0)
   call  PrintChar
-
 _end:
   br  _end
 
@@ -24,12 +23,10 @@ PrintChar:  # r2的值是传入的打印值;
   stw r3, 4(sp) # r3用来存JTAG_UART_BASE;
   stw r4, 0(sp) # r4用来存Status Value;
   movia r3, JTAG_UART_BASE
-
 pc_loop:
   ldwio r4, STATUS_OFFSET(r3)
   andhi r4, r4, WSPACE_MASK
   beq r4, r0, pc_loop
-
 end_pc_loop:
   stwio r2, DATA_OFFSET(r3)
   ldw r3, 4(sp)
