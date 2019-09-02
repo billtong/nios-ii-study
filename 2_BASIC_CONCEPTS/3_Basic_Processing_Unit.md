@@ -33,7 +33,7 @@ Store Rt, X(Rs)
 - memory address <- [PC], read memory, IR <- memory data, PC <- [PC] + 4
 - decode instruction, RA <- [Rs], RB <- [Rt]
 - RZ <- [RA] + X, RM <- [RB]
-- memory address <- [RZ], memory address <- RB, write memory
+- memory address <- [RZ], memory address <- RM, write memory
 - no action
 ## Unconditional Branch instruction
 Br Label
