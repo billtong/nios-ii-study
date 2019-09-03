@@ -14,5 +14,6 @@
 - Instruction Set Architecture
 - Basic Processing Unit
 - Memory System
+- Assembly Language Programming Practise
 ## others
 - 友情链接，宇宙最权威nios ii sample code -> https://github.com/niosii/nios-ii-vscode
