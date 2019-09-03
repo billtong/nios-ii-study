@@ -66,7 +66,7 @@ Return
 # Logic Expressions for control signals
 - IR_en: T1
 - PC_en: T1 + T3(Branch + Call) 
-- RF_Write: T5(Load, ALU, Call)
+- RF_Write: T5(Load + ALU + Call)
 - MEM_read: T1 + T4(Load)
 - MEM_write: T4(Store)
 - MA_Select: T1

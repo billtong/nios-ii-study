@@ -10,6 +10,9 @@
 - Decimal input/output
 - Hexdecimal input/output
 ## 2. Basic Proceesing Unit
-- 
+- Computer Structure
+- Instruction Set Architecture
+- Basic Processing Unit
+- Memory System
 ## others
 - 友情链接，宇宙最权威nios ii sample code -> https://github.com/niosii/nios-ii-vscode
