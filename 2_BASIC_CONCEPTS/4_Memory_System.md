@@ -18,8 +18,8 @@
 - block size: 4 * 32 bit = 2^4 bytes => 12 index bits
 - tag bits = 32 - 12 - 4 = 16
 - the address 0x1F2A86C0
-(0001 1111 0010 1010) (1000 0110 1100) (0000)
-tag 0x1F2A            index 0x86C      offset 0
+- (0001 1111 0010 1010) (1000 0110 1100) (0000)
+- tag 0x1F2A, index 0x86C, offset 0
 ## If the cache organization in part (g) is used for a writeback data cache, give an unsimplified expression for the number of bits of storage in one block
 - storage block = 15 tag bit + 1 valid bit + 1 modified bit
 # Set-associative cache
@@ -29,10 +29,10 @@ tag 0x1F2A            index 0x86C      offset 0
 - 256 kbyte capacity size = 2^18 bytes
 - 2^18 bytes/2^6 bytes per block = 2^12 blocks
 - 2^12 blocks/2 blocks per set = 2^11 sets => 11 set bits
-- tag bits = 32 total bits - 11 set bits - 6 word bits = 15 tag 
+- tag bits = 32 total bits - 11 set bits - 6 word bits = 15 tag
 # the different types of locality exploited by cashed
-- Tempoeral Locality: instructions/data that have been recently accessed are likely to be accessed again
-- Spatial Locality: nearby instructions are likely to be accessed after current access
+- Tempoeral Locality: instructions and data that have been recently accessed are likely to be accessed again
+- Spatial Locality: nearby instructions and data are likely to be accessed after current access
 # Cache/Virtual memory
 - cache memory makes memory appear to be faster than it actually is
 - virtual memory makes memory appear to be bigger than it actually is
