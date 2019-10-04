@@ -1,26 +1,3 @@
-# the hardware source is pressing then releasing pushbutton 1 on the circuit board
-# used in laboratory activity. A parallel input/output port associated with the
-# pushbuttons must be configured for the assertion of a hardware signal to the
-# processor when this pushbutton event occurs
-# main()::
-#   Init()
-#   local_var = 0
-#   loop
-#     local_var = local_var + 1
-#   end loop
-# Init()::
-#   enable interrupts on pshbtn 0
-#   enable procr to recog. pshbtn interrput
-#   enable procr to response to all interrupts
-# isr()::
-#   perform processor-specific reg. update
-#   read special reg. with pending interrupts      
-#   if (pshbtn interrupt is pending) then
-#     clear pshbtn interrupt source
-#     toggle LED0 using XOR operation
-#   end if
-#   return from interrupt
-
 # Author: Bill Tong
 
   .equ  PUSH_BOTTONS_BASE, 0x10000050
