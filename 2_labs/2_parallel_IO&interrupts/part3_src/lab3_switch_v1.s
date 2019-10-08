@@ -27,9 +27,9 @@ _start:
 main:
 	movia sp, LAST_RAM_WORD
 	call Init
-	movi r3, 0
+	# movi r3, 0
 mainloop:
-  addi r3, r3, 1
+  # addi r3, r3, 1
 	br mainloop
 
 Init:
@@ -139,34 +139,41 @@ end_check_led:
 # 循环遍历全部的switch开关
 HandleTimer:
   subi sp, sp, 24
-  stw r3, 0(sp) # save switch_value
-  stw r4, 4(sp) # save counter
-  stw r5, 8(sp) # temp
-  stw r6, 12(sp)  # temp
-  stw r7, 16(sp)
-  stw ra, 20(sp)
+  stw r3, 0(sp) 	# save switch_value
+  stw r4, 4(sp) 	# save counter
+  stw r5, 8(sp) 	# temp
+  stw r6, 12(sp)	# temp
+  stw r7, 16(sp)	# temp 
+  stw ra, 20(sp)	# save calling subroutine addr
   movia r5, SWITCH_VALUE
   ldbio r3, 0(r5) # load data from r3
-  mov r4, r0      # set counter to 1
+  mov r4, r0      # set counter to 0
 ht_loop:
   movi r5, 3
   bgt r4, r5, end_ht_loop
-ht_if:
-  andi r5, r3, 0b1
+  srl r5, r3, r4
+  andi r5, r5, 0b1
   beq r5, r0, ht_else
+ht_if:
   movia r5, HEX_BASE
   ldwio r6, 0(r5)
   movi r5, 0xFF
-  muli r7, r4, 8 
+  muli r7, r4, 8
   sll r5, r5, r7
-
-  or r6, r6, r5  # 这里需要判断是用or还是orh
-
+  xor r6, r6, r5
   movia r5, HEX_BASE
   stwio r6, 0(r5)
   br ht_end_if
 ht_else:
-  
+  movi r5, 0xFF
+  muli r6, r4, 8
+  sll r5, r5, r6
+  addi r6, r0, -1
+  xor r5, r5, r6
+  movia r6, HEX_BASE
+  ldwio r7, 0(r6)
+  and r7, r7, r5
+  stwio r7, 0(r6)
 ht_end_if:
   addi r4, r4, 1
   br ht_loop
@@ -181,4 +188,5 @@ end_ht_loop:
   ret
 
   .org	0x1000
+
   .end
