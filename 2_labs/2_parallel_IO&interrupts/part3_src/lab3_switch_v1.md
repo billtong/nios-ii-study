@@ -1,25 +1,5 @@
-### question (suggested approach)
-Move code for responding to a timer interrupt from the interrupt service routine to a modular subroutine HandleTimer(). The if statement stays in the ISR, but the then body now simply calls the new subroutine.  
-HandleTimer must maintain a variable LIT which is 1 when seven-segment LEDs are on and 0 when they are off. Init() should set LIT to 0 and also turn off all 7 segment LEDs. In HandleTimer(), when turning on the segments, first read the DE0 switch settings and save them to a variable SWITCHES. Use Anding to isolate bits 3...0 and use those bits to determine which of the four seven-segment displays will be lit. Then, for turning segments off, use the saved SWITCHES value to turn off, use the saved SWITCHES value to turn off the displays that were previously lit.
-### pseudocode for HandleTimer subroutine
-- SWITCH_VALUE 0b _ _ _ _ (each bit represent swich on/off)
-- HEX_VALUE 0x __ __ __ __ (each 8 bits represent one 7-segment leds on/off)
-```
-HandleTimer()
-    load SWITCH_VALUE into SV
-    int counter = 0
-    while counter <= 3:
-        temp = SV > counter
-        if (temp and 0b0001) == 1:
-            mask_value = 0xFF >> (counter * 8)
-            load HEX_VALUE into temp
-            new_value = temp xor mask_value
-            store new_value into HEX_VALUE
-        else:
-            mask_value = 0XFF >> (counter * 8)
-            mask_value = mask_value xor 0xFFFFFFFF
-            load HEX_VALUE into temp
-            new_value = temp and mask_value
-            store new_value into HEX_VALUE
-        counter++
-```
+### question
+Move the actions for responding to a button interrupt from the interrupt service routine to a new subroutine HandleButton(). The if statement stays in the ISR, but the then body now simply calls the new subroutine.  
+Extends the button-interrupt actions to read the switch settings on the DE0 board and add the value from the switches to a variable sum in memory. Modify the Init() code to explicitly intialize this variable to zero.  
+Finally modify the main routine loop to also check the current value of the sum variable. If the value of that variable is larger than 256, a break instruction should be executed, which will cause the program(incl. the timer interrupt activity) to simply halt.
+### pseudocode

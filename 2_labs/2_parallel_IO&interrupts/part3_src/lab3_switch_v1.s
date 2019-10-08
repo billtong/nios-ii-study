@@ -1,4 +1,3 @@
-# control 7-segment LEDs by four switches 0-3
 # Author: Bill Tong
 
   .equ  PUSH_BOTTONS_BASE, 0x10000050
@@ -27,10 +26,17 @@ _start:
 main:
 	movia sp, LAST_RAM_WORD
 	call Init
-	# movi r3, 0
 mainloop:
-  # addi r3, r3, 1
+  ldw r3, SUM(r0)
+  srli r3, r3, 8
+  bgt r3, r0, break_mainloop
 	br mainloop
+break_mainloop:
+  rdctl r3, status  # not sure how to halt the isr
+  addi r4, r0, -2
+  and r3, r3, r4
+  wrctl status, r3
+  ret
 
 Init:
   subi sp, sp, 8
@@ -43,16 +49,18 @@ Init:
   srli r3, r3, 16
   sthio r3, TIMMER_HIGH_HALF_START_VALUE(r4)
   /*start interval timer, enable its interrupts*/
-  movi r3, 0b0111 /*START=1, CONT=1, ITO=1*/
+  movi r3, 0b0111 # START=1, CONT=1, ITO=1
   sthio r3, TIMMER_CONTROL_REGISTER(r4)
   /*write to pushbutton port interrupt*/
   movia r4, PUSH_BOTTONS_BASE
-  movi r3, 0b0110
+  movi r3, 0b110
   stwio r3, BUTTONS_MASK_REGISTER(r4)
   /*enable Nios II processor interrupts*/
-  movi r3, 0b011
+  rdctl r3, ienable
+  ori r3, r3, 0b011 # 0b1: timer interrupts, 0b10 button interrupts
   wrctl ienable, r3
-  movi r3, 1
+  rdctl r3, status
+  ori r3, r3, 0b1
   wrctl status, r3
   ldw r3, 0(sp)
   ldw r4, 0(sp)
@@ -60,11 +68,10 @@ Init:
   ret
 
 isr:
-  subi sp, sp, 16
+  subi sp, sp, 12
   stw r3, 0(sp)
   stw r4, 4(sp)
-  stw r5, 8(sp)
-  stw ra, 12(sp)
+  stw ra, 8(sp)
   addi	ea, ea, -4
 isr_check_timmer:
   rdctl r3, ipending
@@ -73,120 +80,46 @@ isr_check_timmer:
 isr_check_timmer_then:
   movia r3, TIMMER_BASE
   sthio r0, 0(r3)
-  call HandleTimer
+  movia r3, HEX_BASE
+  ldwio r4, 0(r3)
+  xori r4, r4, 0xFF
+  stwio r4, 0(r3)
 isr_check_bshbtn:
   movia r3, PUSH_BOTTONS_BASE
   ldwio r4, BUTTONS_EDGE_REGISTER(r3)
   andi r4, r4, 0b0010
   beq r4, r0, isr_end_if
 isr_check_bshbtn_then:
-  movi r4, 2
+  call HandleButton
+isr_end_if:
+  addi r4, r0, -1
   stwio r4, BUTTONS_EDGE_REGISTER(r3)
+  ldw r3, 0(sp)
+  ldw r4, 4(sp)
+  ldw ra, 8(sp)
+  addi sp, sp, 12
+  eret
+	
+HandleButton:
+  subi sp, sp, 12
+  stw r3, 0(sp)
+  stw r4, 4(sp)
+  stw ra, 8(sp)
   movia r3, LEDS_DATA_REGISTER
   ldwio r4, 0(r3)
   xori r4, r4, LED_ZERO
   stwio r4, 0(r3)
-isr_end_if:
-  ldw r3, 0(sp)
-  ldw r4, 4(sp)
-  ldw r5, 8(sp)
-  ldw ra, 12(sp)
-  addi sp, sp, 16
-  eret
-
-/* if 判断全部的switch开关
-HandleTimer:
-  subi sp, sp, 16
-  stw r3, 0(sp)
-  stw r4, 4(sp)
-  stw r5, 8(sp)
-  stw ra, 12(sp)
   movia r3, SWITCH_VALUE
-  mov r5, r0
-check_led_zero:
   ldbio r4, 0(r3)
-  andi r4, r4, 0b0001
-  beq r0, r4, check_led_one
-  ori r5, r5, 0xFF
-check_led_one:
-  ldbio r4, 0(r3)
-  andi r4, r4, 0b0010
-  beq r0, r4, check_led_two
-  ori r5, r5, 0xFF00
-check_led_two:
-  ldbio r4, 0(r3)
-  andi r4, r4, 0b0100
-  beq r0, r4, check_led_three
-  orhi r5, r5, 0xFF
-check_led_three:
-  ldbio r4, 0(r3)
-  andi r4, r4, 0b1000
-  beq r0, r4, end_check_led
-  orhi r5, r5, 0xFF00
-end_check_led:
-  movia r3, HEX_BASE
-  ldwio r4, 0(r3)
-  xor r4, r4, r5
-  stwio r4, 0(r3)
+  ldw r3, SUM(r0)
+  add r3, r3, r4
+  stw r3, SUM(r0)
   ldw r3, 0(sp)
   ldw r4, 4(sp)
-  ldw r5, 8(sp)
-  ldw ra, 12(sp)
-  addi sp, sp, 16
-  ret
-*/
-
-# 循环遍历全部的switch开关
-HandleTimer:
-  subi sp, sp, 24
-  stw r3, 0(sp) 	# save switch_value
-  stw r4, 4(sp) 	# save counter
-  stw r5, 8(sp) 	# temp
-  stw r6, 12(sp)	# temp
-  stw r7, 16(sp)	# temp 
-  stw ra, 20(sp)	# save calling subroutine addr
-  movia r5, SWITCH_VALUE
-  ldbio r3, 0(r5) # load data from r3
-  mov r4, r0      # set counter to 0
-ht_loop:
-  movi r5, 3
-  bgt r4, r5, end_ht_loop
-  srl r5, r3, r4
-  andi r5, r5, 0b1
-  beq r5, r0, ht_else
-ht_if:
-  movia r5, HEX_BASE
-  ldwio r6, 0(r5)
-  movi r5, 0xFF
-  muli r7, r4, 8
-  sll r5, r5, r7
-  xor r6, r6, r5
-  movia r5, HEX_BASE
-  stwio r6, 0(r5)
-  br ht_end_if
-ht_else:
-  movi r5, 0xFF
-  muli r6, r4, 8
-  sll r5, r5, r6
-  addi r6, r0, -1
-  xor r5, r5, r6
-  movia r6, HEX_BASE
-  ldwio r7, 0(r6)
-  and r7, r7, r5
-  stwio r7, 0(r6)
-ht_end_if:
-  addi r4, r4, 1
-  br ht_loop
-end_ht_loop:
-  ldw r3, 0(sp)
-  ldw r4, 4(sp)
-  ldw r5, 8(sp)
-  ldw r6, 12(sp)
-  ldw r7, 16(sp)
-  ldw ra, 20(sp)
-  addi sp, sp, 24
+  ldw ra, 8(sp)
+  addi sp, sp, 12
   ret
 
   .org	0x1000
-
+SUM: .word 0
   .end
