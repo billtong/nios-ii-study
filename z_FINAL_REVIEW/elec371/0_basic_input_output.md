@@ -25,34 +25,22 @@ The code above begins at ROM address 0x0400. For the store instruction that acce
 } -->
 ## parallel i/o and interrupt
 - Identify important steps that processor hardware must perform before executing the first instruction of an interrupt service routine.
-```
-1. after recognizing interrupt, save PC valule (to ea in Nios II)
-2. save processor status register (to estatus in Nios II)
-3. clear global interrupt-enable bit in status register to zero
-4. set PC with address of first instruction of service routine
-5. proceed with fetching an instruciton for execution 
-```
+  1. after recognizing interrupt, save PC valule (to ea in Nios II)
+  2. save processor status register (to estatus in Nios II)
+  3. clear global interrupt-enable bit in status register to zero
+  4. set PC with address of first instruction of service routine
+  5. proceed with fetching an instruciton for execution 
 - What state information does Nios II hardware save on interrupts? Where?
-```
-  PC value is saved in ea (one of the gen-purpose registers)
+  - PC value is saved in ea (one of the gen-purpose registers)
   status reg. value is saved in estatus (a special register in the processer)
-```
 - Describe the specific actitons of the `eret` instructiton(excluding fetch/decode activity that is common to all instructions).
-```
-  copy saved value in estatus to status (restore interrupt-enable bit value of 1)
-  copy saved value in ea to pc (return address to resume main program)
-```
+  - copy saved value in estatus to status (restore interrupt-enable bit value of 1)
+  - copy saved value in ea to pc (return address to resume main program)
 - What is the benefit of having the ienable register in the Nios II processor
-```
-allows selective enabling/disabling recognition of interrupt requests from individual devices without affecting recognition of requests for other devices.
-```
+  - allows selective enabling/disabling recognition of interrupt requests from individual devices without affecting recognition of requests for other devices.
 - What is the benefit of having the ipending register, i.e., if it was absent, ,what would be the impact no the programmer and/or the system?
-```
-combines information about devices requesting interrupt service into one register within the processor -- this avoids having to make many individual external memory-mapped access to I/O registers in order to identify interrupts sources, which reduces the numer of bus transactions and possibly execution time.
-```
+  - combines information about devices requesting interrupt service into one register within the processor -- this avoids having to make many individual external memory-mapped access to I/O registers in order to identify interrupts sources, which reduces the numer of bus transactions and possibly execution time.
 - For a system based on the Nios II processor, briefly identify the different places in the system hardware where interrupts can be enabled or disabled.
-```
-device I/O control register;
-Nios II ienable register;
-Nios II status register;
-```
+  - device I/O control register;
+  - Nios II ienable register;
+  - Nios II status register;
