@@ -24,14 +24,14 @@ Op Rd, Rs, #X
 ## Load instruction
 Load Rt, X(Rs)
 - memory address <- [PC], read memory, IR <- memory data, PC <- [PC] + 4
-- decode instruction, RA <- [Rs]
+- decode instruction, RA <- [Rs], prepare immediately value (conditional)
 - RZ <- [RA] + X
 - memory address <- [RZ], read memory, RY <- memory data
 - Rt <- [RY]
 ## Store instruction
 Store Rt, X(Rs)
 - memory address <- [PC], read memory, IR <- memory data, PC <- [PC] + 4
-- decode instruction, RA <- [Rs], RB <- [Rt]
+- decode instruction, RA <- [Rs], RB <- [Rt], prepare immediately value X (conditional)
 - RZ <- [RA] + X, RM <- [RB]
 - memory address <- [RZ], memory address <- RM, write memory
 - no action
@@ -53,7 +53,7 @@ Branch_if_[Rs]{Op}[Rt] Label
 Call Label
 - memory address <- [PC], read memory, IR <- memory data, PC <- [PC] + 4
 - decode instruction
-- PC-Temp <- [PC], PC <- address from instruction
+- PC-Temp <- [PC], PC <- address from tr
 - RY <- [PC-Temp]
 - Link register in GPR file <- [RY]
 ## Return instruction
