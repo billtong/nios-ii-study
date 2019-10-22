@@ -1,5 +1,5 @@
 # software
-## c
+## C language
 - the DE0 output port word data address for the green LEDs is 0x10000010. Using a #define appropriately, write code that would appear within a program in the C language to turn on(i.e. light up) all ten of the LEDs.
 ```c
   #define LED_PORT (volatile unsigned int*) 0x10000010

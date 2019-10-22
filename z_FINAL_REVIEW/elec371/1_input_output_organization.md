@@ -1,5 +1,5 @@
-# input/output organization
-## Multiple Discrete Chips vs A Single FPGA Chip
+# Input/Output Organization
+## Multiple-Discrete-Chips vs Single-FPGA-Chip
 - For data connections to a processor, briefly describe difference(s) between all-in-a-single-chip implement and circuit-board-with-multiple-chips implement
   - data lines from processor are one-to-many, so only wiring from processor output to destination inputs; data line to processor are many to one which means ORing outputs from sources to input of processor, but each source also requires 2-to-1 MUX internally for zeros.
   - Bidirectional data pins on all relevant chips are connected to common set of data lines on circuit board. Those data pins all must have tristate logic for the output driver.
@@ -27,7 +27,7 @@ word-sized accesses allow A1, A0 to be dropped.
   *I/O 2* | 0xA000 | 0xBFFF | 8kbytes
   *RAM* | 0xC000 | 0xFFFF | 16kbytes
   - 3-to-8 decoder using A15, A14, A13 for 8 kbyte regions; need ORing for ROM and RAM; each I/O device uses a dedicated decoder output.
-- A system with a 16-bit address space has a processor, ROM, RAM, and two I/O devices. ROM is half of the space from addr. 0. RAM is one-quarter of the space, positioned right after the ROM. Each I/O device uses 2 kbutes of space. Derive & write alias-free decoding logic expression.
+- A system with a 16-bit address space has a processor, ROM, RAM, and two I/O devices. ROM is half of the space from addr. 0. RAM is one-quarter of the space, positioned right after the ROM. Each I/O device uses 2 kbytes of space. Derive & write alias-free decoding logic expression.
 ## Others
 - What circuitry is required in a system with multiple masters or initiators?
   - bus arbitration logic

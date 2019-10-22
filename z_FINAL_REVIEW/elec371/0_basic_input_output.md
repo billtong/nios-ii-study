@@ -1,5 +1,5 @@
 # Basic Input/Output
-## io timing diagram
+## I/O timing diagram
 - The DE0 Computer LED port data register address is 0x10000010. turn on the bottom/lowest 6 LEDs.
 ```
 movia r2, 0x10000010
@@ -23,7 +23,7 @@ The code above begins at ROM address 0x0400. For the store instruction that acce
   {name: 'data_to_procr', wave: '=====', data: ['store instr.', '', '', '', '']},
 ],  "config" : { "hscale" : 3 }
 } -->
-## parallel i/o and interrupt
+## parallel I/O and interrupt
 - Identify important steps that processor hardware must perform before executing the first instruction of an interrupt service routine.
   1. after recognizing interrupt, save PC valule (to ea in Nios II)
   2. save processor status register (to estatus in Nios II)
@@ -33,7 +33,7 @@ The code above begins at ROM address 0x0400. For the store instruction that acce
 - What state information does Nios II hardware save on interrupts? Where?
   - PC value is saved in ea (one of the gen-purpose registers)
   status reg. value is saved in estatus (a special register in the processer)
-- Describe the specific actitons of the `eret` instructiton(excluding fetch/decode activity that is common to all instructions).
+- Describe the specific actitons of the `eret` instructiton (excluding fetch/decode activity that is common to all instructions).
   - copy saved value in estatus to status (restore interrupt-enable bit value of 1)
   - copy saved value in ea to pc (return address to resume main program)
 - What is the benefit of having the ienable register in the Nios II processor
