@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "chario.h": "c",
+    "leds.h": "c"
+  }
+}
