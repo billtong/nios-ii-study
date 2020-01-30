@@ -1,6 +1,0 @@
-### question
-### pseudocode
-```
-isr()
-    
-```

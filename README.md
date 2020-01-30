@@ -1,6 +1,5 @@
 # nios-ii-study
 ## about
-- Author: Bill Tong
 - Assembly language learning on Nios-II DE0 media board
 - VSCode is the suggested option to read this repository
 ## others
