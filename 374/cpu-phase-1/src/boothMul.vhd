@@ -12,10 +12,7 @@ entity boothMul is
 end entity;
 
 architecture booth_logic of boothMul is
-
-
 begin
-
 boothMul : process(input0, input1)
 variable sum : signed(63 downto 0) := (others => '0');
 variable M : signed(63 downto 0);

@@ -54,23 +54,17 @@ package my_components is
 	
 	component reg32
 		port(
-			-- clock, (active low) reset, and load enable
-			clk, clr, load_en : in std_logic;
-			-- 32 bits of input
-			d : in std_logic_vector(31 downto 0);
-			-- 32 bits of output
-			q : out std_logic_vector(31 downto 0)
+			clk, clr, load_en : in std_logic;	-- clock, (active low) reset, and load enable
+			d : in std_logic_vector(31 downto 0);	-- 32 bits of input
+			q : out std_logic_vector(31 downto 0)	-- 32 bits of output	
 		);
 	end component;
 	
 	component reg64
 		port(
-			-- clock, (active low) reset, and load enable
-			clk, clr, load_en : in std_logic;
-			-- 64 bits of input
-			d : in std_logic_vector(63 downto 0);
-			-- 2 sets of 32 bits of output
-			q1 : out std_logic_vector(31 downto 0);
+			clk, clr, load_en : in std_logic;	-- clock, (active low) reset, and load enable
+			d : in std_logic_vector(63 downto 0);	-- 64 bits of input
+			q1 : out std_logic_vector(31 downto 0);	-- 2 sets of 32 bits of output
 			q0 : out std_logic_vector(31 downto 0)	
 		);
 	end component;
@@ -122,44 +116,26 @@ package my_components is
 		);
 	end component;
 
----- ALU Components ----
-
 	component and32
 		port(
-			-- 2 32 bits of input
-			input0 : in std_logic_vector(31 downto 0);
-			input1 : in std_logic_vector(31 downto 0);
-			-- 32 bits of output
-			output : out std_logic_vector(31 downto 0)
+			input0 : in std_logic_vector(31 downto 0);	-- 32 bits of input1
+			input1 : in std_logic_vector(31 downto 0);	-- 32 bits of input2
+			output : out std_logic_vector(31 downto 0)	-- 32 bits of output
 		);
 	end component;
 	
 	component or32
 		port(
-			-- 2 32 bits of input
-			input0 : in std_logic_vector(31 downto 0);
+			input0 : in std_logic_vector(31 downto 0);	-- 2 32 bits of input
 			input1 : in std_logic_vector(31 downto 0);
-			-- 32 bits of output
-			output : out std_logic_vector(31 downto 0)
+			output : out std_logic_vector(31 downto 0)	-- 32 bits of output
 		);
 	end component;
 	
 	component not32
 		port(
-			-- 2 32 bits of input
-			input : in std_logic_vector(31 downto 0);
-			-- 32 bits of output
-			output : out std_logic_vector(31 downto 0)
-		);
-	end component;
-	
-	component CLA
-		port(
-			x   : in  std_logic_vector(15 downto 0);
-			y   : in  std_logic_vector(15 downto 0);
-			c0  : in  std_logic;
-			c16 : out std_logic;
-			s : out std_logic_vector(15 downto 0)
+			input : in std_logic_vector(31 downto 0);	-- 2 32 bits of input
+			output : out std_logic_vector(31 downto 0)	-- 32 bits of output
 		);
 	end component;
 	
@@ -194,21 +170,17 @@ package my_components is
 	
 	component shr32
 		port(
-			-- 2 32 bits of input
-			input0 : in std_logic_vector(31 downto 0);
+			input0 : in std_logic_vector(31 downto 0);-- 2 32 bits of input
 			input1 : in std_logic_vector(31 downto 0);
-			-- 32 bits of output
-			output : out std_logic_vector(31 downto 0)
+			output : out std_logic_vector(31 downto 0)-- 32 bits of output
 		);
 	end component;
 	
 	component shl32
 		port(
-			-- 2 32 bits of input
-			input0 : in std_logic_vector(31 downto 0);
+			input0 : in std_logic_vector(31 downto 0);-- 2 32 bits of input
 			input1 : in std_logic_vector(31 downto 0);
-			-- 32 bits of output
-			output : out std_logic_vector(31 downto 0)
+			output : out std_logic_vector(31 downto 0)-- 32 bits of output
 		);
 	end component;
 	
@@ -232,24 +204,18 @@ package my_components is
 	
 	component neg32
 		port(
-			-- 2 32 bits of input
-			input: in std_logic_vector(31 downto 0);
-			-- 32 bits of output
-			output : out std_logic_vector(31 downto 0)
+			input: in std_logic_vector(31 downto 0);-- 2 32 bits of input
+			output : out std_logic_vector(31 downto 0)-- 32 bits of output
 		);
 	end component;
 	
 	component alu
 		port(
-			-- 2 32 bits of input
-			input0 : in std_logic_vector(31 downto 0);
+			input0 : in std_logic_vector(31 downto 0);-- 2 32 bits of input
 			input1 : in std_logic_vector(31 downto 0);
-			-- opcode input
-			opInput : in std_logic_vector(4 downto 0);
-			-- Overflow out
-			overflow : out std_logic;
-			-- 32 bits of output
-			output : out std_logic_vector(63 downto 0)
+			opInput : in std_logic_vector(4 downto 0);-- opcode input
+			overflow : out std_logic;-- Overflow out
+			output : out std_logic_vector(63 downto 0)-- 32 bits of output
 		);
 	end component;
 	
@@ -259,17 +225,13 @@ package my_components is
 			clr : in std_logic;
 			yIn : in std_logic;
 			zIn : in std_logic;
-			-- 2 32 bits of input
-			input0 : in std_logic_vector(31 downto 0);
-			input1 : in std_logic_vector(31 downto 0);
+			input0 : in std_logic_vector(31 downto 0);-- 2 32 bits of input
+			input1 : in std_logic_vector(31 downto 0);-- 2 32 bits of input
 			IncPC	 : in std_logic;
-			-- opcode input
-			opInput : in std_logic_vector(4 downto 0);
-			-- Overflow out
-			overflow : out std_logic;
-			-- 32 bits of output
-			outputHi	 : out std_logic_vector(31 downto 0);
-			outputLow : out std_logic_vector(31 downto 0)
+			opInput : in std_logic_vector(4 downto 0);-- opcode input
+			overflow : out std_logic;-- Overflow out
+			outputHi	 : out std_logic_vector(31 downto 0);-- 32 bits of output hi
+			outputLow : out std_logic_vector(31 downto 0)-- 32 bits of output lo
 		);
 	end component;
 	

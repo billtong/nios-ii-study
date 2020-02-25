@@ -1,7 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
-
 use work.my_components.all;
 
 entity myBus is
@@ -43,24 +42,11 @@ entity myBus is
 	);
 end entity;
 
-----------------------------------------------------------------
-
 architecture logic of myBus is
-
-
-
 signal BusSel : std_logic_vector(4 downto 0);
-
----- Default ----
---signal defaultSig : UNSIGNED(31 downto 0) := (others => 'X'); 
 signal defaultSig : std_logic_vector(31 downto 0);
-
 begin
-
----- Instantiate Encoder and Mux ----
-BusEncoder : encoder32 port map (encoderIn, BusSel);
-
+BusEncoder : encoder32 port map (encoderIn, BusSel);	-- Instantiate Encoder and Mux
 BusMux : lpm_mux0 port map (muxIn0, muxIn1, muxIn2, muxIn3, muxIn4, muxIn5, muxIn6, muxIn7, muxIn8, muxIn9, muxIn10, muxIn11, muxIn12, muxIn13,
 muxIn14, muxIn15, muxIn16, muxIn17, muxIn18, muxIn19, muxIn20, muxIn21, muxIn22, muxIn23, muxIn24, muxIn25, muxIn26, muxIn27, muxIn28, muxIn29, muxIn30, muxIn31, BusSel, BusMuxOut);
-
 end architecture;

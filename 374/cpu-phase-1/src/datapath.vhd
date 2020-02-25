@@ -16,22 +16,9 @@ entity datapath is
 		IncPC		: in std_logic;
 		---- Outputports for testing purposes ----
 		BusMuxOut	: out std_logic_vector(31 downto 0);
-		-- R0out			: out std_logic_vector(31 downto 0);
-		-- R1out			: out std_logic_vector(31 downto 0);
 		R2out			: out std_logic_vector(31 downto 0);
-		-- R3out			: out std_logic_vector(31 downto 0);
 		R4out			: out std_logic_vector(31 downto 0);
 		R5out			: out std_logic_vector(31 downto 0);
-		-- R6out			: out std_logic_vector(31 downto 0);
-		-- R7out			: out std_logic_vector(31 downto 0);
-		-- R8out			: out std_logic_vector(31 downto 0);
-		-- R9out			: out std_logic_vector(31 downto 0);
-		-- R10out		: out std_logic_vector(31 downto 0);
-		-- R11out		: out std_logic_vector(31 downto 0);
-		-- R12out		: out std_logic_vector(31 downto 0);
-		-- R13out		: out std_logic_vector(31 downto 0);
-		-- R14out		: out std_logic_vector(31 downto 0);
-		-- R15out		: out std_logic_vector(31 downto 0);
 		HIout			: out std_logic_vector(31 downto 0);
 		LOout			: out std_logic_vector(31 downto 0);
 		IRout			: out std_logic_vector(31 downto 0);
@@ -43,7 +30,6 @@ architecture logic of datapath is
 ---- simulated signals ----
 signal inport		: std_logic_vector(31 downto 0);
 signal outport		: std_logic_vector(31 downto 0);
-
 ---- BusMux Inputs ----
 signal BusMuxIn_R0 : std_logic_vector(31 downto 0);
 signal BusMuxIn_R1 : std_logic_vector(31 downto 0);
@@ -69,34 +55,25 @@ signal BusMuxIn_PC : std_logic_vector(31 downto 0);
 signal BusMuxIn_MDR : std_logic_vector(31 downto 0);
 signal BusMuxIn_Inport : std_logic_vector(31 downto 0);
 signal C_sign_extended : std_logic_vector(31 downto 0);
-
 ---- BusMux Output ----
 signal internalBusMuxOut : std_logic_vector(31 downto 0);
-
 ---- Default ----
 signal defaultSig : std_logic_vector(31 downto 0);
-
 ---- ALU-Related Signals ----
 signal overflow : std_logic;
-
 ---- Memory-Related data Signals ----
 signal MARout	: std_logic_vector(31 downto 0);
-
 ---- Select and Encode Signals ----
 signal internalIRout			: std_logic_vector(31 downto 0);
-
----- Control Signals ----
+---- Control Signals ----(prepare for phase 2)
 
 ---- Output clear from control unit/input to registers ----
 signal clr : std_logic;
-
 begin
 ---- Set default values, to get rid of compiler warnings ----
 defaultSig <= (others => '0');
-
 ---- set clear signal inactivated
 clr <= '1';
-
 -- CLK clr EN D Q
 R0	: reg32 port map (clk, clr, internalRegEnableIn(0), internalBusMuxOut, BusMuxIn_R0);
 R1	: reg32 port map (clk, clr, internalRegEnableIn(1), internalBusMuxOut, BusMuxIn_R1);
@@ -129,11 +106,9 @@ DatapathAluPath : aluPath port map (clk, clr,
 internalRegEnableIn(22), -- Yin
 internalRegEnableIn(23), -- Zin
 internalBusMuxOut, internalBusMuxOut, IncPC, aluOp, overflow, BusMuxIn_Zhigh, BusMuxIn_Zlow);
-
 ---- Inport and Outport Registers ----
 Inreg		: reg32 port map (clk, clr, internalRegEnableIn(24), inport, BusMuxIn_Inport);
 OutReg	: reg32 port map (clk, clr, internalRegEnableIn(25), internalBusMuxOut, outport);
-
 ---- Instantiate Encoder and Mux ----
 DatapathBus : myBus port map (
 BusMuxIn_R0, -- 0
@@ -161,29 +136,14 @@ BusMuxIn_MDR, -- 21
 BusMuxIn_Inport, -- 22
 C_sign_extended, -- 23
 defaultSig, defaultSig, defaultSig, defaultSig, defaultSig, defaultSig, defaultSig, defaultSig, internalEncoderIn, internalBusMuxOut);
-
 ---- Set testing outports to internal signals ----
 BusMuxOut <= internalBusMuxOut;
--- R0out <= BusMuxIn_R0;
--- R1out <= BusMuxIn_R1;
 R2out <= BusMuxIn_R2;
--- R3out <= BusMuxIn_R3;
 R4out <= BusMuxIn_R4;
 R5out <= BusMuxIn_R5;
--- R6out <= BusMuxIn_R6;
--- R7out <= BusMuxIn_R7;
--- R8out <= BusMuxIn_R8;
--- R9out <= BusMuxIn_R9;
--- R10out <= BusMuxIn_R10;
--- R11out <= BusMuxIn_R11;
--- R12out <= BusMuxIn_R12;
--- R13out <= BusMuxIn_R13;
--- R14out <= BusMuxIn_R14;
--- R15out <= BusMuxIn_R15;
 HIout <= BusMuxIn_HI;
 LOout <= BusMuxIn_LO;
 Zout(63 downto 32) <= BusMuxIn_Zhigh;
 Zout(31 downto 0) <= BusMuxIn_Zlow;
 IRout <= internalIRout;
-
 end architecture;

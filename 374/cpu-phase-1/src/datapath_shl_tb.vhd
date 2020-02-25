@@ -1,3 +1,6 @@
+-- --------------------------------------------------
+-- vhdl test bench file of shl
+-- --------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
 
@@ -17,25 +20,10 @@ signal Mdatain_tb	:	std_logic_vector(31 downto 0);
 -- output
 signal BusMuxOut_tb, HIout_tb, LOout_tb, IRout_tb	:	std_logic_vector(31 downto 0);
 signal Zout_tb	:	std_logic_vector(63 downto 0);
-
--- signal R0out_tb			: std_logic_vector(31 downto 0);
--- signal R1out_tb			: std_logic_vector(31 downto 0);
 signal R2out_tb			: std_logic_vector(31 downto 0);
--- signal R3out_tb			: std_logic_vector(31 downto 0);
 signal R4out_tb			: std_logic_vector(31 downto 0);
 signal R5out_tb			: std_logic_vector(31 downto 0);
--- signal R6out_tb			: std_logic_vector(31 downto 0);
--- signal R7out_tb			: std_logic_vector(31 downto 0);
--- signal R8out_tb			: std_logic_vector(31 downto 0);
--- signal R9out_tb			: std_logic_vector(31 downto 0);
--- signal R10out_tb		: std_logic_vector(31 downto 0);
--- signal R11out_tb		: std_logic_vector(31 downto 0);
--- signal R12out_tb		: std_logic_vector(31 downto 0);
--- signal R13out_tb		: std_logic_vector(31 downto 0);
--- signal R14out_tb		: std_logic_vector(31 downto 0);
--- signal R15out_tb		: std_logic_vector(31 downto 0);
-
-type	state is(default, Reg_load1a, Reg_load1b, Reg_load2a, Reg_load2b, Reg_load3a, Reg_load3b, T0, T1, T2, T3, T4, T5);
+type	state is(default, Reg_load1a, Reg_load1b, Reg_load2a, Reg_load2b, Reg_load3a, Reg_load3b, T0, T1, T2, T3, T4, T5, T6);
 signal	present_state: State := default;
 
 component datapath
@@ -50,22 +38,9 @@ component datapath
 		IncPC		: in std_logic;
 		---- Outputports for testing purposes ----
 		BusMuxOut	: out std_logic_vector(31 downto 0);
-		-- R0out			: out std_logic_vector(31 downto 0);
-		-- R1out			: out std_logic_vector(31 downto 0);
 		R2out			: out std_logic_vector(31 downto 0);
-		-- R3out			: out std_logic_vector(31 downto 0);
 		R4out			: out std_logic_vector(31 downto 0);
 		R5out			: out std_logic_vector(31 downto 0);
-		-- R6out			: out std_logic_vector(31 downto 0);
-		-- R7out			: out std_logic_vector(31 downto 0);
-		-- R8out			: out std_logic_vector(31 downto 0);
-		-- R9out			: out std_logic_vector(31 downto 0);
-		-- R10out		: out std_logic_vector(31 downto 0);
-		-- R11out		: out std_logic_vector(31 downto 0);
-		-- R12out		: out std_logic_vector(31 downto 0);
-		-- R13out		: out std_logic_vector(31 downto 0);
-		-- R14out		: out std_logic_vector(31 downto 0);
-		-- R15out		: out std_logic_vector(31 downto 0);
 		HIout			: out std_logic_vector(31 downto 0);
 		LOout			: out std_logic_vector(31 downto 0);
 		IRout			: out std_logic_vector(31 downto 0);
@@ -112,6 +87,8 @@ begin
 				present_state <= T4;
 			when T4 =>
 				present_state <= T5;
+			when T5 =>
+				present_state <= T6;
 			when others =>
 		end case;
 	end if;
@@ -157,7 +134,7 @@ begin
 			RegEnable_tb <= (18 => '1', 20 => '1', others => '0'); -- pc load_en, MDR load_en
 			IncPC_tb <= '0';
 			MDRRead_tb <= '1';
-			Mdatain_tb <= x"4A920000";	-- opcode for “and R5, R2, R4” 
+			Mdatain_tb <= x"32920000";	-- opcode for “and R5, R2, R4” 
 		when T2 =>
 			MDRRead_tb <= '0';
 			Mdatain_tb <= (others => '0');
@@ -168,11 +145,14 @@ begin
 			RegEnable_tb <= (22 => '1', others => '0');	-- RY load_en
 		when T4 =>
 			encoderIn_tb <= (4 => '1', others => '0');	-- R4 encoder input
-			aluOp_tb <= "01010";	
+			aluOp_tb <= "00110";	
 			RegEnable_tb <= (23 => '1', others => '0');	-- RZ load_en
 		when T5 =>
 			encoderIn_tb <= (19 => '1', others => '0');	-- Zlow encoder
-			RegEnable_tb <= (5 => '1', others => '0');	-- R5 load_en
+			RegEnable_tb <= (5 => '1', 17=>'1', others => '0');	-- R5, LO load_en
+		when T6 =>
+			encoderIn_tb <= (18 => '1', others => '0');	-- Zhigh encoder
+			RegEnable_tb <= (16 => '1', others=>'0');	-- HI load_en
 		when others =>
 	end case;
 end process;
